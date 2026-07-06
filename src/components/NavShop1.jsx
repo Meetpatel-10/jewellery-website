@@ -1,15 +1,22 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useRef } from "react";
 import { ChevronDown, ListFilter } from "lucide-react";
 
 const NavShop1 = () => {
     
-  const [openCategory, setOpenCategory] = useState(false);
-  const [openFilter, setOpenFilter] = useState(false);
-  const [openCollection, setOpenCollection] = useState(false);
-  const [openMetal, setOpenMetal] = useState(false);
-  const [openGemstone, setOpenGemstone] = useState(false);
-  const [openOccasion, setOpenOccasion] = useState(false);
-  const [openPrice, setOpenPrice] = useState(false);
+ const [openMenu, setOpenMenu] = useState("");
+
+const timeoutRef = useRef(null);
+
+const handleMouseEnter = (menu) => {
+  clearTimeout(timeoutRef.current);
+  setOpenMenu(menu);
+};
+
+const handleMouseLeave = () => {
+  timeoutRef.current = setTimeout(() => {
+    setOpenMenu("");
+  }, 200);
+};
 
   const categoryItems = [
     "All Jewellery",
@@ -82,195 +89,209 @@ const priceItems = [
       <div className="flex flex-wrap items-center gap-5 md:gap-10">
 
         {/* Filter */}
-        <div className="relative"
-        onMouseEnter={() => setOpenFilter(true)}
-        onMouseLeave={() => setOpenFilter(false)}>
+        <div
+  className="relative"
+  onMouseEnter={() => handleMouseEnter("filter")}
+  onMouseLeave={handleMouseLeave}
+>
+  <button className="flex items-center gap-2 text-black font-medium border-r pr-6">
+    <ListFilter size={18} />
+    Filter
+    <ChevronDown size={18} />
+  </button>
 
-           <button
-              onClick={() => setOpenFilter(!openFilter)}
-               className="flex items-center gap-2 text-black font-medium border-r pr-6" >
-               <ListFilter size={18} />
-                 Filter
-                 <ChevronDown size={18} />
-             </button>
-
-              {openFilter && (
-             <div className="absolute top-full left-0 w-56 pt-1 z-50 text-black bg-white border border-gray-300 rounded-lg shadow-lg ">
-
-             {filterItems.map((item, index) => (
-              <button
-               key={index}
-               className="block w-full text-left px-4 py-2 hover:bg-gray-100 cursor-pointer">
-             {item}
-               </button>
-         ))}
-
-           </div>
-          )}
-
-        </div>
-
-        {/* Category Dropdown */}
-        <div className="relative "
-        onMouseEnter={() => setOpenCategory(true)}
-        onMouseLeave={() => setOpenCategory(false)}>
-          <button
-            onClick={() => setOpenCategory(!openCategory)}
-            className="flex items-center gap-1 text-[#827C7C] font-medium"
-          >
-            Category
-            <ChevronDown size={18} />
-          </button>
-
-          {openCategory && (
-            <div className="absolute top-10 left-0 w-56 pt-1 text-black bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-              {categoryItems.map((item, index) => (
-                <button
-                  key={index}
-                  className="block w-full text-left px-4 py-2 hover:bg-gray-100"
-                >
-                  {item}
-                </button>
-              ))}
-            </div>
-          )}
-        </div>
-
-        {/* Collection Buttons */}
-        <div className="relative "
-        onMouseEnter={() => setOpenCollection(true)}
-        onMouseLeave={() => setOpenCollection(false)}>
-
-          <button
-            onClick={() => setOpenCollection(!openCollection)}
-            className="flex items-center gap-1 text-[#827C7C] font-medium" >
-            Collection
-            <ChevronDown size={18} />
-          </button>
-
-           {openCollection && (
-            <div className="absolute top-10 left-0 w-56 pt-1 text-black bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-            {collectionItems.map((item, index) => (
-         <button
+  {openMenu === "filter" && (
+    <div
+      className="absolute top-full left-0 mt-2 w-56 z-50 bg-white border text-black border-gray-300 rounded-lg shadow-lg"
+      onMouseEnter={() => handleMouseEnter("filter")}
+      onMouseLeave={handleMouseLeave}
+    >
+      {filterItems.map((item, index) => (
+        <button
           key={index}
-          className="block w-full text-left px-4 py-2 hover:bg-gray-100">
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
           {item}
-         </button>
-         ))}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
-         </div>
-          )}
-        </div>
+{/* Category Dropdown */}
+<div
+  className="relative"
+  onMouseEnter={() => handleMouseEnter("category")}
+  onMouseLeave={handleMouseLeave}
+>
+  <button className="flex items-center gap-1 text-[#827C7C] font-medium">
+    Category
+    <ChevronDown size={18} />
+  </button>
 
-        {/* Metal Button */}
-        <div className="relative "
-        onMouseEnter={() => setOpenMetal(true)}
-        onMouseLeave={() => setOpenMetal(false)}>
+  {openMenu === "category" && (
+    <div
+      className="absolute top-full left-0 mt-2 w-56 z-50 text-black bg-white border border-gray-300 rounded-lg shadow-lg"
+      onMouseEnter={() => handleMouseEnter("category")}
+      onMouseLeave={handleMouseLeave}
+    >
+      {categoryItems.map((item, index) => (
+        <button
+          key={index}
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
-          <button
-             onClick={() => setOpenMetal(!openMetal)}
-             className="flex items-center gap-1 text-[#827C7C] font-medium">
-             Metal
-             <ChevronDown size={18} />
-          </button>
+{/* Collection Dropdown */}
+<div
+  className="relative"
+  onMouseEnter={() => handleMouseEnter("collection")}
+  onMouseLeave={handleMouseLeave}
+>
+  <button className="flex items-center gap-1 text-[#827C7C] font-medium">
+    Collection
+    <ChevronDown size={18} />
+  </button>
 
-             {openMetal && (
-            <div className="absolute top-10 left-0 w-56 pt-1 text-black bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-               {metalItems.map((item, index) => (
-              <button
-               key={index}
-               className="block w-full text-left px-4 py-2 hover:bg-gray-100" >
-                 {item}
-             </button>
-                 ))}
-            </div>
-            )}
+  {openMenu === "collection" && (
+    <div
+      className="absolute top-full left-0 mt-2 w-56 z-50 text-black bg-white border border-gray-300 rounded-lg shadow-lg"
+      onMouseEnter={() => handleMouseEnter("collection")}
+      onMouseLeave={handleMouseLeave}
+    >
+      {collectionItems.map((item, index) => (
+        <button
+          key={index}
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
-        </div>
+{/* Metal Dropdown */}
+<div
+  className="relative"
+  onMouseEnter={() => handleMouseEnter("metal")}
+  onMouseLeave={handleMouseLeave}
+>
+  <button className="flex items-center gap-1 text-[#827C7C] font-medium">
+    Metal
+    <ChevronDown size={18} />
+  </button>
 
-        {/* Gemstone Button */}
-        <div className="relative "
-        onMouseEnter={() => setOpenGemstone(true)}
-        onMouseLeave={() => setOpenGemstone(false)}>
+  {openMenu === "metal" && (
+    <div
+      className="absolute top-full left-0 mt-2 w-56 z-50 text-black bg-white border border-gray-300 rounded-lg shadow-lg"
+      onMouseEnter={() => handleMouseEnter("metal")}
+      onMouseLeave={handleMouseLeave}
+    >
+      {metalItems.map((item, index) => (
+        <button
+          key={index}
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
-          <button
-             onClick={() => setOpenGemstone(!openGemstone)}
-             className="flex items-center gap-1 text-[#827C7C] font-medium" >
-             Gemstone
-             <ChevronDown size={18} />
-          </button>
+{/* Gemstone Dropdown */}
+<div
+  className="relative"
+  onMouseEnter={() => handleMouseEnter("gemstone")}
+  onMouseLeave={handleMouseLeave}
+>
+  <button className="flex items-center gap-1 text-[#827C7C] font-medium">
+    Gemstone
+    <ChevronDown size={18} />
+  </button>
 
-            {openGemstone && (
-          <div className="absolute top-10 left-0 w-56 pt-1 text-black bg-white border border-gray-300 rounded-lg shadow-lg z-50">
+  {openMenu === "gemstone" && (
+    <div
+      className="absolute top-full left-0 mt-2 w-56 z-50 text-black bg-white border border-gray-300 rounded-lg shadow-lg"
+      onMouseEnter={() => handleMouseEnter("gemstone")}
+      onMouseLeave={handleMouseLeave}
+    >
+      {gemstoneItems.map((item, index) => (
+        <button
+          key={index}
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
-            {gemstoneItems.map((item, index) => (
-            <button
-             key={index}
-             className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-             {item}
-           </button>
-           ))}
-          </div>
-         )}
+{/* Occasion Dropdown */}
+<div
+  className="relative"
+  onMouseEnter={() => handleMouseEnter("occasion")}
+  onMouseLeave={handleMouseLeave}
+>
+  <button className="flex items-center gap-1 text-[#827C7C] font-medium">
+    Occasion
+    <ChevronDown size={18} />
+  </button>
 
-        </div>
-  
-       {/* {Occasion Button} */}
-        <div className="relative "
-        onMouseEnter={() => setOpenOccasion(true)}
-        onMouseLeave={() => setOpenOccasion(false)}>
+  {openMenu === "occasion" && (
+    <div
+      className="absolute top-full left-0 mt-2 w-56 z-50 text-black bg-white border border-gray-300 rounded-lg shadow-lg"
+      onMouseEnter={() => handleMouseEnter("occasion")}
+      onMouseLeave={handleMouseLeave}
+    >
+      {occasionItems.map((item, index) => (
+        <button
+          key={index}
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
 
-          <button
-           onClick={() => setOpenOccasion(!openOccasion)}
-           className="flex items-center gap-1 text-[#827C7C] font-medium">
-           Occasion
-           <ChevronDown size={18} />
-          </button>
+{/* Price Dropdown */}
+<div
+  className="relative"
+  onMouseEnter={() => handleMouseEnter("price")}
+  onMouseLeave={handleMouseLeave}
+>
+  <button className="flex items-center gap-1 text-[#827C7C] font-medium">
+    Price
+    <ChevronDown size={18} />
+  </button>
 
-          {openOccasion && (
-          <div className="absolute top-10 left-0 w-56 pt-1 text-black bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-
-           {occasionItems.map((item, index) => (
-            <button
-             key={index}
-             className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-             {item}
-            </button>
-           ))}
-
-          </div>
-           )}
-
-        </div>
-   
-       {/* Price Button */}
-        <div className="relative "
-        onMouseEnter={() => setOpenPrice(true)}
-        onMouseLeave={() => setOpenPrice(false)}>
-
-          <button
-            onClick={() => setOpenPrice(!openPrice)}
-            className="flex items-center gap-1 text-[#827C7C] font-medium">
-              Price
-            <ChevronDown size={18} />
-          </button>
-
-          {openPrice && (
-          <div className="absolute top-10 left-0 w-56 pt-1 text-black bg-white border border-gray-300 rounded-lg shadow-lg z-50">
-
-            {priceItems.map((item, index) => (
-            <button
-              key={index}
-             className="block w-full text-left px-4 py-2 hover:bg-gray-100">
-              {item}
-            </button>
-           ))}
-
-           </div>
-         )}
-
-        </div>
-
+  {openMenu === "price" && (
+    <div
+      className="absolute top-full left-0 mt-2 w-56 z-50 text-black bg-white border border-gray-300 rounded-lg shadow-lg"
+      onMouseEnter={() => handleMouseEnter("price")}
+      onMouseLeave={handleMouseLeave}
+    >
+      {priceItems.map((item, index) => (
+        <button
+          key={index}
+          className="block w-full text-left px-4 py-2 hover:bg-gray-100"
+        >
+          {item}
+        </button>
+      ))}
+    </div>
+  )}
+</div>
+        
       </div>
     </div>
   );
