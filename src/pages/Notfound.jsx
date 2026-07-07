@@ -1,6 +1,8 @@
 import React from 'react'
+import { useNavigate } from "react-router-dom";
 
 const NotFound = () => {
+  const navigate = useNavigate();
   return (
 <div className="h-[81vh] flex flex-col justify-center items-center bg-slate-950 text-white">
     <h2 className="text-8xl font-bold text-[#CDAE87] text-shadow-xs">
